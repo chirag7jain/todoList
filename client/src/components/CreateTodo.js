@@ -16,7 +16,7 @@ class CreateTodo extends Component {
       method: 'POST',
       body: JSON.stringify({title: e.target.elements.title.value}),
       headers: {'Content-Type': 'application/json'}
-    })
+    }).then(window.location.reload())
   }
 
   render() {
