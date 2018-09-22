@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import CreateTodo from './CreateTodo'
+import { Link } from 'react-router-dom';
 
+import CreateTodo from './CreateTodo'
 const BASE_API_TODOS = "/api/v1/todos"
 
-class IndexComponent extends Component {
+class IndexTodo extends Component {
   constructor(props) {
     super(props);
 
@@ -39,6 +40,8 @@ class IndexComponent extends Component {
           <td>{todo.createdAt}</td>
           <td>{todo.updatedAt}</td>
           <td>
+          <Link to={`${BASE_API_TODOS}/${todo.id}`}>SHOW</Link>
+
             <button type="button" className="close" aria-label="Delete" title="Delete" onClick={this.removeTodo.bind(this, todo.id)}>
               <span aria-hidden="true">&times;</span>
             </button>
@@ -70,4 +73,4 @@ class IndexComponent extends Component {
   }
 }
 
-export default IndexComponent;
+export default IndexTodo;

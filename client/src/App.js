@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import IndexComponent from './components/IndexComponent';
+
+import IndexTodo from './components/IndexTodo';
+import ShowTodo from './components/ShowTodo';
+
+const BASE_API_TODOS = "/api/v1/todos"
 
 class App extends Component {
   render() {
@@ -18,7 +22,8 @@ class App extends Component {
             </div>
           </nav>
           <Switch>
-            <Route exact path='/' component={IndexComponent} />
+            <Route exact path='/' component={IndexTodo} />
+            <Route exact path='/:id' component={ShowTodo} />
           </Switch>
         </div>
       </Router>
