@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import CreateTodo from './CreateTodo'
+
+const BASE_API_TODOS = "/api/v1/todos"
 
 class IndexComponent extends Component {
   constructor(props) {
@@ -7,12 +10,19 @@ class IndexComponent extends Component {
     this.state = {
       todos: [],
     }
+
+    this.removeTodo = this.removeTodo.bind(this)
   }
 
   componentDidMount() {
-    fetch('/api/v1/todos')
+    fetch(BASE_API_TODOS)
       .then(res => res.json())
-      .then(todos => this.setState({todos}))
+      .then(todos => this.setState({ todos }))
+  }
+
+  removeTodo(id) {
+    return fetch(BASE_API_TODOS + "/" + id, { method: "delete" })
+      .then(this.setState({ todos: this.state.todos.filter(todo => todo.id !== id) }))
   }
 
   render() {
@@ -20,7 +30,7 @@ class IndexComponent extends Component {
     let todosBody;
 
     if (this.state.todos.length === 0) {
-      todosBody = <tr><td colspan="100%">No todos created</td></tr>
+      todosBody = <tr><td colSpan="100%">No todos created</td></tr>
     }
     else {
       todosBody = this.state.todos.map(todo =>
@@ -28,28 +38,35 @@ class IndexComponent extends Component {
           <td>{todo.title}</td>
           <td>{todo.createdAt}</td>
           <td>{todo.updatedAt}</td>
+          <td>
+            <button type="button" className="close" aria-label="Delete" title="Delete" onClick={this.removeTodo.bind(this, todo.id)}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </td>
         </tr>
       )
     }
 
-    content = 
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Updated At</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {todosBody}
-        </tbody>
-      </table>
+    content =
+      <div>
+        <CreateTodo />
 
-    return (
-      content
-    );
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Updated At</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {todosBody}
+          </tbody>
+        </table>
+      </div>
+
+    return (content);
   }
 }
 
