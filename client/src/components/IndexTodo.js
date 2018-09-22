@@ -40,8 +40,7 @@ class IndexTodo extends Component {
           <td>{todo.createdAt}</td>
           <td>{todo.updatedAt}</td>
           <td>
-          <Link to={`/${todo.id}`}>SHOW</Link>
-
+            <Link to={`/${todo.id}`}>SHOW</Link>
             <button type="button" className="close" aria-label="Delete" title="Delete" onClick={this.removeTodo.bind(this, todo.id)}>
               <span aria-hidden="true">&times;</span>
             </button>

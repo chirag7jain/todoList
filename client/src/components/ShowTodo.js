@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import CreateTodoItem from './CreateTodoItem'
+
 const BASE_API_TODOS = "/api/v1/todos"
 
 class ShowTodo extends Component {
@@ -29,8 +31,16 @@ class ShowTodo extends Component {
     newTodo = Object.assign({}, this.state.todo);
     newTodo.todoItems = this.state.todo.todoItems.filter(todoItem => todoItem.id !== id)
 
-    return fetch(this.base_api_current_todo_item + "/" + id, { method: "delete" })
+    return fetch(this.base_api_current_todo_item + "/items/" + id, { method: "delete" })
       .then(this.setState({ todo: newTodo }))
+  }
+
+  updateTodoItem(id, complete) {
+    return fetch(this.base_api_current_todo_item + "/items/" + id, {
+      headers: { "Content-Type": "application/json" },
+      method: "put",
+      body: JSON.stringify({ complete: complete }),
+    }).then(window.location.reload())
   }
 
   render() {
@@ -51,6 +61,15 @@ class ShowTodo extends Component {
             <button type="button" className="close" aria-label="Delete" title="Delete" onClick={this.removeTodoItem.bind(this, todoItem.id)}>
               <span aria-hidden="true">&times;</span>
             </button>
+            {!todoItem.complete ?
+              <button type="button" className="btn btn-primary" aria-label="Complete" title="Complete" onClick={this.updateTodoItem.bind(this, todoItem.id, true)}>
+                <span aria-hidden="true">Complete</span>
+              </button>
+              :
+              <button type="button" className="btn btn-danger" aria-label="Undo" title="Undo" onClick={this.updateTodoItem.bind(this, todoItem.id, false)}>
+                <span aria-hidden="true">Undo</span>
+              </button>
+            }
           </td>
         </tr>
       )
@@ -60,7 +79,10 @@ class ShowTodo extends Component {
       <div>
         <div className="row justify-content-center mt-2 mb-2">
           <h1>{this.state.todo.title}</h1>
-        </div>  
+        </div>
+        <div className="row">
+          <CreateTodoItem todoId = {this.props.match.params.id}/>
+        </div>
         <div className="row">
           <table className="table">
             <thead>
